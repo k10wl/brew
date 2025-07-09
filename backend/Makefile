@@ -7,7 +7,7 @@ HTTP_BINARY=brew-http
 GO=go
 LDFLAGS=-ldflags="-s -w"
 
-.PHONY: build-http run-http
+.PHONY: build-http run-http dev-http
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
@@ -17,3 +17,6 @@ build-http: $(BUILD_DIR)
 
 run-http: build-http
 	./$(BUILD_DIR)/$(HTTP_BINARY)
+
+dev-http:
+	air -c .air.http.toml
