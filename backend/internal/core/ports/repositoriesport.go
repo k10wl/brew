@@ -13,16 +13,16 @@ type PaginatedResult[T any] struct {
 	HasMore     bool
 }
 
-type JarRepository interface {
-	Save(ctx context.Context, jar *domain.Jar) error
-	GetByID(ctx context.Context, id string) (*domain.Jar, error)
+type BrewRepository interface {
+	Save(ctx context.Context, brew *domain.Brew) error
+	GetByID(ctx context.Context, id string) (*domain.Brew, error)
 	GetBySessionID(
 		ctx context.Context,
 		sessionID string,
 		pointer *string,
 		limit int,
-	) (*PaginatedResult[*domain.Jar], error)
-	Update(ctx context.Context, jar *domain.Jar) error
+	) (*PaginatedResult[*domain.Brew], error)
+	Update(ctx context.Context, brew *domain.Brew) error
 	Exists(ctx context.Context, id string) (bool, error)
 }
 

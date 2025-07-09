@@ -4,16 +4,16 @@ import (
 	"time"
 )
 
-type Jar struct {
+type Brew struct {
 	ID        string
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func NewJar(id string, name string) *Jar {
+func NewBrew(id string, name string) *Brew {
 	now := time.Now()
-	return &Jar{
+	return &Brew{
 		ID:        id,
 		Name:      name,
 		CreatedAt: now,
@@ -21,7 +21,7 @@ func NewJar(id string, name string) *Jar {
 	}
 }
 
-func (j *Jar) UpdateName(name string) {
-	j.Name = name
-	j.UpdatedAt = time.Now()
+func (b *Brew) UpdateName(name string) {
+	b.Name = name
+	b.UpdatedAt = time.Now()
 }

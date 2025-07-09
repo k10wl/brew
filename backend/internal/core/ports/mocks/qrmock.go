@@ -9,13 +9,13 @@ import (
 var _ ports.QRCodeGenerator = (*QRCodeGenerator)(nil)
 
 type QRCodeGenerator struct {
-	GenerateQRCodeFunc func(ctx context.Context, jarID string) ([]byte, error)
+	GenerateQRCodeFunc func(ctx context.Context, brewID string) ([]byte, error)
 	ParseQRCodeFunc    func(ctx context.Context, qrData []byte) (string, error)
 }
 
-func (m *QRCodeGenerator) GenerateQRCode(ctx context.Context, jarID string) ([]byte, error) {
+func (m *QRCodeGenerator) GenerateQRCode(ctx context.Context, brewID string) ([]byte, error) {
 	if m.GenerateQRCodeFunc != nil {
-		return m.GenerateQRCodeFunc(ctx, jarID)
+		return m.GenerateQRCodeFunc(ctx, brewID)
 	}
 	return nil, nil
 }
