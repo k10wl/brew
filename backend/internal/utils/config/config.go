@@ -22,18 +22,22 @@ type Config struct {
 	LogLevel string `json:"log_level"`
 }
 
+type WatcherFactory func() (*fsnotify.Watcher, error)
+
 type ConfigWatcher struct {
-	configPath   string
-	callbacks    *list.List
-	mu           sync.RWMutex
-	cachedConfig *Config
+	configPath     string
+	callbacks      *list.List
+	mu             sync.RWMutex
+	cachedConfig   *Config
+	watcherFactory WatcherFactory
 }
 
 func NewConfigWatcher(configPath string) *ConfigWatcher {
 	slog.Debug("Creating new config watcher", "path", configPath)
 	watcher := &ConfigWatcher{
-		configPath: configPath,
-		callbacks:  list.New(),
+		configPath:     configPath,
+		callbacks:      list.New(),
+		watcherFactory: fsnotify.NewWatcher,
 	}
 	watcher.start()
 	return watcher
@@ -106,7 +110,7 @@ func (cw *ConfigWatcher) start() {
 func (cw *ConfigWatcher) watchConfig() {
 	slog.Debug("Initializing file watcher", "path", cw.configPath)
 
-	watcher, err := fsnotify.NewWatcher()
+	watcher, err := cw.watcherFactory()
 	if err != nil {
 		slog.Error("Failed to create file watcher", "error", err, "path", cw.configPath)
 		return
