@@ -1,4 +1,4 @@
-package jar
+package services
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"brew/internal/core/ports/mocks"
 )
 
-func TestService_CreateJar_Success(t *testing.T) {
+func TestJarService_CreateJar_Success(t *testing.T) {
 	var receivedName string
 	var receivedExistsID string
 	var receivedSaveJar *domain.Jar
@@ -35,7 +35,7 @@ func TestService_CreateJar_Success(t *testing.T) {
 		},
 	}
 
-	service := NewService(jarRepo, sessionRepo, identifierGen)
+	service := NewJarService(jarRepo, sessionRepo, identifierGen)
 
 	ctx := context.Background()
 	name := "test-jar"
@@ -80,7 +80,7 @@ func TestService_CreateJar_Success(t *testing.T) {
 	}
 }
 
-func TestService_CreateJar_IdentifierGenerationError(t *testing.T) {
+func TestJarService_CreateJar_IdentifierGenerationError(t *testing.T) {
 	jarRepo := &mocks.JarRepository{
 		ExistsFunc: func(ctx context.Context, id string) (bool, error) {
 			return false, nil
@@ -99,7 +99,7 @@ func TestService_CreateJar_IdentifierGenerationError(t *testing.T) {
 		},
 	}
 
-	service := NewService(jarRepo, sessionRepo, identifierGen)
+	service := NewJarService(jarRepo, sessionRepo, identifierGen)
 
 	ctx := context.Background()
 	name := "test-jar"
@@ -118,7 +118,7 @@ func TestService_CreateJar_IdentifierGenerationError(t *testing.T) {
 	}
 }
 
-func TestService_CreateJar_JarAlreadyExists(t *testing.T) {
+func TestJarService_CreateJar_JarAlreadyExists(t *testing.T) {
 	jarRepo := &mocks.JarRepository{
 		ExistsFunc: func(ctx context.Context, id string) (bool, error) {
 			return true, nil
@@ -134,7 +134,7 @@ func TestService_CreateJar_JarAlreadyExists(t *testing.T) {
 		},
 	}
 
-	service := NewService(jarRepo, sessionRepo, identifierGen)
+	service := NewJarService(jarRepo, sessionRepo, identifierGen)
 
 	ctx := context.Background()
 	name := "test-jar"
@@ -154,7 +154,7 @@ func TestService_CreateJar_JarAlreadyExists(t *testing.T) {
 	}
 }
 
-func TestService_CreateJar_ExistsCheckError(t *testing.T) {
+func TestJarService_CreateJar_ExistsCheckError(t *testing.T) {
 	jarRepo := &mocks.JarRepository{
 		ExistsFunc: func(ctx context.Context, id string) (bool, error) {
 			return false, errors.New("exists check failed")
@@ -170,7 +170,7 @@ func TestService_CreateJar_ExistsCheckError(t *testing.T) {
 		},
 	}
 
-	service := NewService(jarRepo, sessionRepo, identifierGen)
+	service := NewJarService(jarRepo, sessionRepo, identifierGen)
 
 	ctx := context.Background()
 	name := "test-jar"
@@ -189,7 +189,7 @@ func TestService_CreateJar_ExistsCheckError(t *testing.T) {
 	}
 }
 
-func TestService_CreateJar_SaveError(t *testing.T) {
+func TestJarService_CreateJar_SaveError(t *testing.T) {
 	jarRepo := &mocks.JarRepository{
 		ExistsFunc: func(ctx context.Context, id string) (bool, error) {
 			return false, nil
@@ -208,7 +208,7 @@ func TestService_CreateJar_SaveError(t *testing.T) {
 		},
 	}
 
-	service := NewService(jarRepo, sessionRepo, identifierGen)
+	service := NewJarService(jarRepo, sessionRepo, identifierGen)
 
 	ctx := context.Background()
 	name := "test-jar"

@@ -1,4 +1,4 @@
-package qr
+package services
 
 import (
 	"context"
@@ -6,24 +6,24 @@ import (
 	"brew/internal/core/ports"
 )
 
-type Service struct {
+type QRService struct {
 	qrGenerator ports.QRCodeGenerator
 }
 
-func NewService(qrGenerator ports.QRCodeGenerator) *Service {
-	return &Service{
+func NewQRService(qrGenerator ports.QRCodeGenerator) *QRService {
+	return &QRService{
 		qrGenerator: qrGenerator,
 	}
 }
 
-func (s *Service) GenerateQRCode(
+func (s *QRService) GenerateQRCode(
 	ctx context.Context,
 	jarID string,
 ) ([]byte, error) {
 	return s.qrGenerator.GenerateQRCode(ctx, jarID)
 }
 
-func (s *Service) ParseQRCode(
+func (s *QRService) ParseQRCode(
 	ctx context.Context,
 	qrData []byte,
 ) (string, error) {

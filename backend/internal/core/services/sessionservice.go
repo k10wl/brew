@@ -1,4 +1,4 @@
-package session
+package services
 
 import (
 	"context"
@@ -8,17 +8,17 @@ import (
 	"brew/internal/core/ports"
 )
 
-type Service struct {
+type SessionService struct {
 	sessionRepo ports.SessionRepository
 }
 
-func NewService(sessionRepo ports.SessionRepository) *Service {
-	return &Service{
+func NewSessionService(sessionRepo ports.SessionRepository) *SessionService {
+	return &SessionService{
 		sessionRepo: sessionRepo,
 	}
 }
 
-func (s *Service) CreateSession(
+func (s *SessionService) CreateSession(
 	ctx context.Context,
 	id string,
 ) (*domain.Session, error) {
@@ -37,28 +37,28 @@ func (s *Service) CreateSession(
 	return session, nil
 }
 
-func (s *Service) GetSessionByID(
+func (s *SessionService) GetSessionByID(
 	ctx context.Context,
 	id string,
 ) (*domain.Session, error) {
 	return s.sessionRepo.GetByID(ctx, id)
 }
 
-func (s *Service) UpdateSession(
+func (s *SessionService) UpdateSession(
 	ctx context.Context,
 	session *domain.Session,
 ) error {
 	return s.sessionRepo.Update(ctx, session)
 }
 
-func (s *Service) DeleteSession(
+func (s *SessionService) DeleteSession(
 	ctx context.Context,
 	id string,
 ) error {
 	return s.sessionRepo.Delete(ctx, id)
 }
 
-func (s *Service) UpdateLastAccessed(
+func (s *SessionService) UpdateLastAccessed(
 	ctx context.Context,
 	id string,
 ) error {

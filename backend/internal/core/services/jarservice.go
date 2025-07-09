@@ -1,4 +1,4 @@
-package jar
+package services
 
 import (
 	"context"
@@ -8,25 +8,25 @@ import (
 	"brew/internal/core/ports"
 )
 
-type Service struct {
+type JarService struct {
 	jarRepo       ports.JarRepository
 	sessionRepo   ports.SessionRepository
 	identifierGen ports.IdentifierGenerator
 }
 
-func NewService(
+func NewJarService(
 	jarRepo ports.JarRepository,
 	sessionRepo ports.SessionRepository,
 	identifierGen ports.IdentifierGenerator,
-) *Service {
-	return &Service{
+) *JarService {
+	return &JarService{
 		jarRepo:       jarRepo,
 		sessionRepo:   sessionRepo,
 		identifierGen: identifierGen,
 	}
 }
 
-func (s *Service) CreateJar(
+func (s *JarService) CreateJar(
 	ctx context.Context,
 	name string,
 	sessionID string,
