@@ -6,7 +6,7 @@ import (
 
 	"brew/internal/core/domain"
 	"brew/internal/core/ports"
-	"brew/internal/util"
+	"brew/internal/utils/logger"
 )
 
 type BrewService struct {
@@ -32,21 +32,21 @@ func (s *BrewService) CreateBrew(
 	name string,
 	sessionID string,
 ) (*domain.Brew, error) {
-	util.Debug("Creating brew", "name", name, "session_id", sessionID)
+	logger.Debug("Creating brew", "name", name, "session_id", sessionID)
 
 	id, err := s.identifierGen.Generate(ctx, name)
 	if err != nil {
-		util.Error("Failed to generate identifier", "error", err, "name", name)
+		logger.Error("Failed to generate identifier", "error", err, "name", name)
 		return nil, err
 	}
 
 	exists, err := s.brewRepo.Exists(ctx, id)
 	if err != nil {
-		util.Error("Failed to check if brew exists", "error", err, "id", id)
+		logger.Error("Failed to check if brew exists", "error", err, "id", id)
 		return nil, err
 	}
 	if exists {
-		util.Warn("Brew already exists", "id", id)
+		logger.Error("Brew already exists", "id", id)
 		return nil, fmt.Errorf("brew with id %s already exists", id)
 	}
 
@@ -57,10 +57,10 @@ func (s *BrewService) CreateBrew(
 
 	err = s.brewRepo.Save(ctx, brew)
 	if err != nil {
-		util.Error("Failed to save brew", "error", err, "id", id)
+		logger.Error("Failed to save brew", "error", err, "id", id)
 		return nil, err
 	}
 
-	util.Debug("Brew created successfully", "id", id, "name", name)
+	logger.Debug("Brew created successfully", "id", id, "name", name)
 	return brew, nil
 }
