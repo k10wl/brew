@@ -35,7 +35,7 @@ System connects physical jars to digital records.
 - System accepts camera scans and manual entry
 - Works on any platform without special hardware
 
-### FR-1.4: Jar Record Persistence
+### FR-1.3: Jar Record Persistence
 System maintains permanent link between jar identifier and data record.
 - Link must survive system updates
 - Link must survive data migrations
