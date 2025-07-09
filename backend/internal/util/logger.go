@@ -114,3 +114,23 @@ func updateLogger() {
 	slog.SetDefault(slog.New(handler))
 	slog.Info("Log level updated", "new_level", config.LogLevel)
 }
+
+// Debug logs a debug message with key-value pairs
+func Debug(msg string, keysAndValues ...any) {
+	slog.Debug(msg, keysAndValues...)
+}
+
+// Info logs an info message with key-value pairs
+func Info(msg string, keysAndValues ...any) {
+	slog.Info(msg, keysAndValues...)
+}
+
+// Warn logs a warning message with key-value pairs
+func Warn(msg string, keysAndValues ...any) {
+	slog.Warn(msg, keysAndValues...)
+}
+
+// Error logs an error message with key-value pairs
+func Error(msg string, keysAndValues ...any) {
+	slog.Error(msg, keysAndValues...)
+}

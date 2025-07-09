@@ -1,12 +1,10 @@
 package main
 
 import (
-	"log/slog"
-
-	_ "brew/internal/util"
+	"brew/internal/util"
 )
 
 func main() {
-	slog.Info("Starting brew HTTP server")
-	slog.Info("HTTP server ready")
+	util.Info("Starting brew HTTP server")
+	util.Info("HTTP server ready")
 }
