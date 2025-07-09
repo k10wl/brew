@@ -141,7 +141,13 @@ func TestConfigWatcher_FileWatch(t *testing.T) {
 	data, _ := json.Marshal(initialConfig)
 	os.WriteFile(testFile, data, 0644)
 
-	watcher := newTestConfigWatcher(testFile)
+	mockWatcher := newMockWatcher()
+
+	factory := func() (*fsnotify.Watcher, error) {
+		return &mockWatcher.Watcher, nil
+	}
+
+	watcher := newTestConfigWatcherWithFactory(testFile, factory)
 
 	var mu sync.Mutex
 	var receivedConfig *Config
@@ -160,6 +166,13 @@ func TestConfigWatcher_FileWatch(t *testing.T) {
 	updatedConfig := Config{LogLevel: "DEBUG"}
 	data, _ = json.Marshal(updatedConfig)
 	os.WriteFile(testFile, data, 0644)
+
+	writeEvent := fsnotify.Event{
+		Name: testFile,
+		Op:   fsnotify.Write,
+	}
+
+	mockWatcher.events <- writeEvent
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -344,7 +357,13 @@ func TestConfigWatcher_WatchConfigEventHandling(t *testing.T) {
 	data, _ := json.Marshal(testConfig)
 	os.WriteFile(testFile, data, 0644)
 
-	watcher := newTestConfigWatcher(testFile)
+	mockWatcher := newMockWatcher()
+
+	factory := func() (*fsnotify.Watcher, error) {
+		return &mockWatcher.Watcher, nil
+	}
+
+	watcher := newTestConfigWatcherWithFactory(testFile, factory)
 
 	var mu sync.Mutex
 	var callbackCalled bool
@@ -363,6 +382,13 @@ func TestConfigWatcher_WatchConfigEventHandling(t *testing.T) {
 	updatedConfig := Config{LogLevel: "DEBUG"}
 	data, _ = json.Marshal(updatedConfig)
 	os.WriteFile(testFile, data, 0644)
+
+	writeEvent := fsnotify.Event{
+		Name: testFile,
+		Op:   fsnotify.Write,
+	}
+
+	mockWatcher.events <- writeEvent
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -397,7 +423,13 @@ func TestConfigWatcher_WatchConfigCreateEvent(t *testing.T) {
 	testFile := "test-create-event.json"
 	defer os.Remove(testFile)
 
-	watcher := newTestConfigWatcher(testFile)
+	mockWatcher := newMockWatcher()
+
+	factory := func() (*fsnotify.Watcher, error) {
+		return &mockWatcher.Watcher, nil
+	}
+
+	watcher := newTestConfigWatcherWithFactory(testFile, factory)
 
 	var mu sync.Mutex
 	var callbackCalled bool
@@ -416,6 +448,13 @@ func TestConfigWatcher_WatchConfigCreateEvent(t *testing.T) {
 	testConfig := Config{LogLevel: "WARN"}
 	data, _ := json.Marshal(testConfig)
 	os.WriteFile(testFile, data, 0644)
+
+	createEvent := fsnotify.Event{
+		Name: testFile,
+		Op:   fsnotify.Create,
+	}
+
+	mockWatcher.events <- createEvent
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -485,7 +524,13 @@ func TestConfigWatcher_WatchConfigGracefulDegradation(t *testing.T) {
 	data, _ := json.Marshal(testConfig)
 	os.WriteFile(testFile, data, 0644)
 
-	watcher := newTestConfigWatcher(testFile)
+	mockWatcher := newMockWatcher()
+
+	factory := func() (*fsnotify.Watcher, error) {
+		return &mockWatcher.Watcher, nil
+	}
+
+	watcher := newTestConfigWatcherWithFactory(testFile, factory)
 
 	go watcher.watchConfig()
 
@@ -501,6 +546,13 @@ func TestConfigWatcher_WatchConfigGracefulDegradation(t *testing.T) {
 	updatedConfig := Config{LogLevel: "ERROR"}
 	data, _ = json.Marshal(updatedConfig)
 	os.WriteFile(testFile, data, 0644)
+
+	createEvent := fsnotify.Event{
+		Name: testFile,
+		Op:   fsnotify.Create,
+	}
+
+	mockWatcher.events <- createEvent
 
 	time.Sleep(100 * time.Millisecond)
 
