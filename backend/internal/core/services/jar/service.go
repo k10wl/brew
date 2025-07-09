@@ -44,41 +44,15 @@ func (s *Service) CreateJar(
 		return nil, fmt.Errorf("jar with id %s already exists", id)
 	}
 
-	jar := domain.NewJar(id, name)
+	jar := &domain.Jar{
+		ID:   id,
+		Name: name,
+	}
+
 	err = s.jarRepo.Save(ctx, jar)
 	if err != nil {
 		return nil, err
 	}
 
 	return jar, nil
-}
-
-func (s *Service) GetJarByID(
-	ctx context.Context,
-	id string,
-) (*domain.Jar, error) {
-	return s.jarRepo.GetByID(ctx, id)
-}
-
-func (s *Service) UpdateJarName(
-	ctx context.Context,
-	id string,
-	name string,
-) error {
-	jar, err := s.jarRepo.GetByID(ctx, id)
-	if err != nil {
-		return err
-	}
-
-	jar.UpdateName(name)
-	return s.jarRepo.Update(ctx, jar)
-}
-
-func (s *Service) GetJarsBySessionID(
-	ctx context.Context,
-	sessionID string,
-	pointer *string,
-	limit int,
-) (*ports.PaginatedResult[*domain.Jar], error) {
-	return s.jarRepo.GetBySessionID(ctx, sessionID, pointer, limit)
 }

@@ -7,7 +7,7 @@ HTTP_BINARY=brew-http
 GO=go
 LDFLAGS=-ldflags="-s -w"
 
-.PHONY: build-http run-http dev-http
+.PHONY: build-http run-http dev-http test coverage clean
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
@@ -20,3 +20,15 @@ run-http: build-http
 
 dev-http:
 	air -c .air.http.toml
+
+test:
+	$(GO) test ./...
+
+coverage:
+	@mkdir -p tmp
+	$(GO) test -coverprofile=tmp/coverage.out ./...
+	$(GO) tool cover -html=tmp/coverage.out -o tmp/coverage.html
+	@echo "Coverage report generated: tmp/coverage.html"
+
+clean:
+	rm -rf tmp/*
