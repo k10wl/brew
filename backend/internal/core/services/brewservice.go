@@ -8,51 +8,51 @@ import (
 	"brew/internal/core/ports"
 )
 
-type JarService struct {
-	jarRepo       ports.JarRepository
+type BrewService struct {
+	brewRepo      ports.BrewRepository
 	sessionRepo   ports.SessionRepository
 	identifierGen ports.IdentifierGenerator
 }
 
-func NewJarService(
-	jarRepo ports.JarRepository,
+func NewBrewService(
+	brewRepo ports.BrewRepository,
 	sessionRepo ports.SessionRepository,
 	identifierGen ports.IdentifierGenerator,
-) *JarService {
-	return &JarService{
-		jarRepo:       jarRepo,
+) *BrewService {
+	return &BrewService{
+		brewRepo:      brewRepo,
 		sessionRepo:   sessionRepo,
 		identifierGen: identifierGen,
 	}
 }
 
-func (s *JarService) CreateJar(
+func (s *BrewService) CreateBrew(
 	ctx context.Context,
 	name string,
 	sessionID string,
-) (*domain.Jar, error) {
+) (*domain.Brew, error) {
 	id, err := s.identifierGen.Generate(ctx, name)
 	if err != nil {
 		return nil, err
 	}
 
-	exists, err := s.jarRepo.Exists(ctx, id)
+	exists, err := s.brewRepo.Exists(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 	if exists {
-		return nil, fmt.Errorf("jar with id %s already exists", id)
+		return nil, fmt.Errorf("brew with id %s already exists", id)
 	}
 
-	jar := &domain.Jar{
+	brew := &domain.Brew{
 		ID:   id,
 		Name: name,
 	}
 
-	err = s.jarRepo.Save(ctx, jar)
+	err = s.brewRepo.Save(ctx, brew)
 	if err != nil {
 		return nil, err
 	}
 
-	return jar, nil
+	return brew, nil
 }

@@ -18,9 +18,9 @@ func NewQRService(qrGenerator ports.QRCodeGenerator) *QRService {
 
 func (s *QRService) GenerateQRCode(
 	ctx context.Context,
-	jarID string,
+	brewID string,
 ) ([]byte, error) {
-	return s.qrGenerator.GenerateQRCode(ctx, jarID)
+	return s.qrGenerator.GenerateQRCode(ctx, brewID)
 }
 
 func (s *QRService) ParseQRCode(
