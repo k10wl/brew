@@ -23,4 +23,4 @@ jobs:
   backend-test:
     needs: detect-changes
     if: needs.detect-changes.outputs.backend == 'true'
-    uses: ./backend/.github/workflows/backend-test.yml 
+    uses: ./.github/workflows/backend-test.yml 
