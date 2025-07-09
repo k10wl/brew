@@ -1,6 +1,6 @@
 BUILD_DIR=bin
 CMD_DIR=cmd
-HTTP_ENTRYPOINT=$(CMD_DIR)/http.go
+HTTP_ENTRYPOINT=$(CMD_DIR)/http/main.go
 HTTP_BINARY=brew-http
 
 # Go variables

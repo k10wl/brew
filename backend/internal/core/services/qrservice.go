@@ -2,8 +2,10 @@ package services
 
 import (
 	"context"
+	"log/slog"
 
 	"brew/internal/core/ports"
+	_ "brew/internal/util"
 )
 
 type QRService struct {
@@ -20,12 +22,24 @@ func (s *QRService) GenerateQRCode(
 	ctx context.Context,
 	brewID string,
 ) ([]byte, error) {
-	return s.qrGenerator.GenerateQRCode(ctx, brewID)
+	slog.Debug("Generating QR code", "brew_id", brewID)
+	qrData, err := s.qrGenerator.GenerateQRCode(ctx, brewID)
+	if err != nil {
+		return nil, err
+	}
+	slog.Debug("QR code generated successfully", "brew_id", brewID, "data_size", len(qrData))
+	return qrData, nil
 }
 
 func (s *QRService) ParseQRCode(
 	ctx context.Context,
 	qrData []byte,
 ) (string, error) {
-	return s.qrGenerator.ParseQRCode(ctx, qrData)
+	slog.Debug("Parsing QR code", "data_size", len(qrData))
+	result, err := s.qrGenerator.ParseQRCode(ctx, qrData)
+	if err != nil {
+		return "", err
+	}
+	slog.Debug("QR code parsed successfully", "result", result, "data_size", len(qrData))
+	return result, nil
 }
